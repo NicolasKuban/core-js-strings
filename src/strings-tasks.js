@@ -20,8 +20,17 @@
  *   getStringLength(undefined) => 0
  */
 function getStringLength(value) {
-  return value.length;
+  if (typeof value === 'string') {
+    return value.length;
+  }
+  return 0;
 }
+// console.log(getStringLength('aaaaa')) // => 5
+// console.log(getStringLength('b')) // => 1
+// console.log(getStringLength('')) // => 0
+// console.log(getStringLength()) // => 0
+// console.log(getStringLength(null)) // => 0
+// console.log(getStringLength(undefined)) // => 0
 
 /**
  * Returns true if the value is a string, otherwise returns false.
@@ -54,8 +63,11 @@ function isString(value) {
  *   concatenateStrings('', 'bb') => 'bb'
  */
 function concatenateStrings(value1, value2) {
-  return value1 + value2;
+  return value1.concat(value2);
 }
+// console.log(concatenateStrings('aa', 'bb')) // => 'aabb'
+// console.log(concatenateStrings('aa', '')) // => 'aa'.
+// console.log(concatenateStrings('', 'bb')) // => 'bb'
 
 /**
  * Returns the first character of the given string.
@@ -69,8 +81,11 @@ function concatenateStrings(value1, value2) {
  *   getFirstChar('') => ''
  */
 function getFirstChar(value) {
-  return value[0];
+  return value.charAt(0);
 }
+// console.log(getFirstChar('John Doe')) // => 'J'
+// console.log(getFirstChar('cat')) //  => 'c'
+// console.log(getFirstChar('')) // => ''
 
 /**
  * Removes leading and trailing whitespace characters from the string.
@@ -136,8 +151,15 @@ function removeTrailingWhitespaces(value) {
  *   repeatString('abc', -2) => ''
  */
 function repeatString(str, times) {
+  if (times < 0) {
+    return '';
+  }
   return str.repeat(times);
 }
+// console.log(repeatString('A', 5)) // => 'AAAAA'
+// console.log(repeatString('cat', 3)) // => 'catcatcat'
+// console.log(repeatString('', 3)) // => ''
+// console.log(repeatString('abc', -2)) // => ''
 
 /**
  * Remove the first occurrence of a substring from a string.
@@ -152,12 +174,17 @@ function repeatString(str, times) {
  *   removeFirstOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
 function removeFirstOccurrences(str, value) {
-  return (
-    str.slice(0, str.indexOf(value)) +
-    str.slice(str.indexOf(value) + value.length)
-  );
+  const index = str.indexOf(value);
+  // console.log(~index);
+  if (index === -1) {
+    return str;
+  }
+  return str.slice(0, index) + str.slice(index + value.length);
 }
-
+// console.log(removeFirstOccurrences('To be or not to be', 'be')) // => 'To  or not to be'.
+// console.log(removeFirstOccurrences('I like legends', 'end')) // => 'I like legs'.
+// console.log(removeFirstOccurrences('ABABAB', 'BA')) // => 'ABAB'.
+// console.log(removeFirstOccurrences('The quick brown fox', 'dog')) // 'The quick brown fox', 'dog'
 /**
  * Remove the last occurrence of a substring from a string.
  *
@@ -171,14 +198,17 @@ function removeFirstOccurrences(str, value) {
  *   removeLastOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
 function removeLastOccurrences(str, value) {
-  return (
-    str.slice(0, str.lastIndexOf(value)) +
-    str.slice(str.lastIndexOf(value) + value.length)
-  );
+  const index = str.lastIndexOf(value);
+  if (index === -1) {
+    return str;
+  }
+  return str.slice(0, index) + str.slice(index + value.length);
 }
 // console.log(removeLastOccurrences('To be or not to be', 'be'))
 // console.log(removeLastOccurrences('I like legends', 'end'))
 // console.log(removeLastOccurrences('ABABAB', 'BA'))
+// console.log(removeLastOccurrences('The quick brown fox', 'dog')) // 'The quick brown fox', 'dog'
+
 /**
  * Calculate the sum of character codes of the given string.
  *
@@ -196,9 +226,9 @@ function sumOfCodes(str) {
   if (!str) {
     return 0;
   }
-  for (const char of str) {
+  for (let i = 0; i < str.length; i += 1) {
     // console.log(char.codePointAt());
-    result += char.codePointAt();
+    result += str.charCodeAt(i);
   }
   return result;
 }
@@ -334,8 +364,13 @@ function containsSubstring(str, substring) {
 function countVowels(str) {
   const vowels = 'aeiouy';
   let result = 0;
-  for (const char of str) {
-    if (vowels.includes(char.toLowerCase())) {
+  // for (const char of str) {
+  //   if (vowels.includes(char.toLowerCase())) {
+  //     result += 1;
+  //   }
+  // }
+  for (let i = 0; i < str.length; i += 1) {
+    if (vowels.includes(str[i].toLowerCase())) {
       result += 1;
     }
   }
@@ -359,14 +394,20 @@ function countVowels(str) {
  */
 function isPalindrome(str) {
   let strOnlyAlfa = '';
-  for (const char of str.toLowerCase()) {
-    // if (char.match(/[a-z]/i))
-    // str.match(/[a-z]/i)
-    if (/[a-z]/.test(char)) {
-      strOnlyAlfa += char;
+  // for (const char of str.toLowerCase()) {
+  //   // if (char.match(/[a-z]/i))
+  //   // str.match(/[a-z]/i)
+  //   if (/[a-z]/.test(char)) {
+  //     strOnlyAlfa += char;
+  //   }
+  //   // console.log(char, /[a-z]/.test(char))
+  // }
+  for (let i = 0; i < str.length; i += 1) {
+    if (/[a-z]/.test(str[i].toLowerCase())) {
+      strOnlyAlfa += str[i].toLowerCase();
     }
-    // console.log(char, /[a-z]/.test(char))
   }
+
   // console.log(strOnlyAlfa)
   return strOnlyAlfa === strOnlyAlfa.split('').reverse().join('');
 }
@@ -390,12 +431,19 @@ function isPalindrome(str) {
 function findLongestWord(sentence) {
   const words = sentence.split(' ');
   const result = [0, ''];
-  for (const word of words) {
-    if (word.length > result[0]) {
-      result[0] = word.length;
-      result[1] = word;
+  // for (const word of words) {
+  //   if (word.length > result[0]) {
+  //     result[0] = word.length;
+  //     result[1] = word;
+  //   }
+  // }
+  for (let i = 0; i < words.length; i += 1) {
+    if (words[i].length > result[0]) {
+      result[0] = words[i].length;
+      result[1] = words[i];
     }
   }
+
   return result[1];
 }
 // console.log(findLongestWord('The quick brown fox')) // => 'quick'
@@ -436,11 +484,18 @@ function reverseWords(str) {
  */
 function invertCase(str) {
   let result = '';
-  for (const char of str) {
+  for (let i = 0; i < str.length; i += 1) {
     result +=
-      char === char.toLowerCase() ? char.toUpperCase() : char.toLowerCase();
+      str[i] === str[i].toLowerCase()
+        ? str[i].toUpperCase()
+        : str[i].toLowerCase();
     // console.log(char)
   }
+  // for (const char of str) {
+  //   result +=
+  //     char === char.toLowerCase() ? char.toUpperCase() : char.toLowerCase();
+  //   // console.log(char)
+  // }
   return result;
 }
 // console.log(invertCase('Hello, World!')) // =>  'hELLO, wORLD!'
@@ -545,9 +600,26 @@ function extractEmails(str) {
  */
 function encodeToRot13(str) {
   let result = '';
-  for (const char of str) {
+  // for (const char of str) {
+  //   let shift = 0;
+  //   const codeChar = char.codePointAt();
+  //   if (codeChar >= 65 && codeChar <= 90) {
+  //     shift = 65;
+  //   }
+  //   if (codeChar >= 97 && codeChar <= 122) {
+  //     shift = 97;
+  //   }
+  //   // (codeChar - shift + 13) % 26 + shift
+  //   // console.log(shift, Boolean(shift))
+  //   if (shift) {
+  //     result += String.fromCharCode(((codeChar - shift + 13) % 26) + shift);
+  //   } else {
+  //     result += char;
+  //   }
+  // }
+  for (let i = 0; i < str.length; i += 1) {
     let shift = 0;
-    const codeChar = char.codePointAt();
+    const codeChar = str[i].codePointAt();
     if (codeChar >= 65 && codeChar <= 90) {
       shift = 65;
     }
@@ -559,7 +631,7 @@ function encodeToRot13(str) {
     if (shift) {
       result += String.fromCharCode(((codeChar - shift + 13) % 26) + shift);
     } else {
-      result += char;
+      result += str[i];
     }
   }
   return result;
